@@ -19,12 +19,19 @@ def video_msg(bot, update):
     logger.info("{} {} sent video".format(
         update.message.from_user.first_name, update.message.from_user.last_name))
     clip = VideoFileClip("{}.mp4".format(name)).crop(x1=35, x2=205, y1=35, y2=205)
-    clip.write_gif("{}.gif".format(name))
-    clip.reader.close()
-    clip.audio.reader.close_proc()
-    bot.send_document(chat_id=update.message.chat_id,
+    if clip.fps > 40:
+        clip.reader.close()
+        clip.audio.reader.close_proc()
+        update.message.reply_text("This file has problem so cannot make gif!!!")
+    else:
+        clip.write_gif("{}.gif".format(name))
+        clip.reader.close()
+        clip.audio.reader.close_proc()
+        bot.send_document(chat_id=update.message.chat_id,
                       document=open("{}.gif".format(name), 'rb'),
                       timeout=600)
+
+
 
 
 if __name__ == "__main__":
