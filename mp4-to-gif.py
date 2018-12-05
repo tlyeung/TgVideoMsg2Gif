@@ -24,15 +24,12 @@ def video_msg(bot, update):
         clip.audio.reader.close_proc()
         update.message.reply_text("This file has problem so cannot make gif!!!")
     else:
-        clip.write_gif("{}.gif".format(name))
+        clip.write_videofile("{}-cropped.mp4".format(name), audio=False)
         clip.reader.close()
         clip.audio.reader.close_proc()
-        bot.send_document(chat_id=update.message.chat_id,
-                      document=open("{}.gif".format(name), 'rb'),
+        bot.send_animation(chat_id=update.message.chat_id,
+                      animation=open("{}-cropped.mp4".format(name), 'rb'),
                       timeout=600)
-
-
-
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
